@@ -61,6 +61,7 @@ public class Snake {
     private Point head;
     private Point tail;
     private Dir curDir;
+    private Dir nextDir;
     
     public Snake(GameMap map, Point startPoint, Dir startDir) {
         curDir = startDir;
@@ -100,7 +101,7 @@ public class Snake {
     }
 
     public Status move(GameMap map) {
-        return move(map, curDir);
+        return move(map, nextDir == null ? curDir : nextDir);
     }
     /* 
      * move towards current direction 
@@ -115,6 +116,8 @@ public class Snake {
         Block nextBlock = map.getBlock(nextHead);
         if (nextBlock != Block.ERROR) {
             switch (nextBlock) {
+            case BODY:
+                if (!tail.equals(nextHead)) break;
             case EMPTY:
                 if (!moveTail(map)) {
                     break;
@@ -143,9 +146,7 @@ public class Snake {
     }
     
     public void changeDir(Dir newDir) {
-        if (newDir != opposite(curDir)) {
-            curDir = newDir;
-        }
+        nextDir = newDir;
     }
     
     public Dir getCurDir() {
