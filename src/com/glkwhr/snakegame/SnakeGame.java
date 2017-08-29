@@ -3,19 +3,14 @@
  */
 package com.glkwhr.snakegame;
 
-import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.util.Scanner;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import com.glkwhr.snakegame.GameMap.Block;
 import com.glkwhr.snakegame.Snake.Dir;
-import com.glkwhr.snakegame.Snake.Status;
 
 /**
  * @author H.W.

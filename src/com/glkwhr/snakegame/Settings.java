@@ -16,7 +16,7 @@ public class Settings {
     public static final int DEFAULT_COL = 8;
     
     // default block size (in pixel)
-    public static final int DEFAULT_BLOCK_SIZE = 30;
+    public static final int DEFAULT_BLOCK_SIZE = 50;
     
     // default map size (in pixel)
     public static final int DEFAULT_MAP_WIDTH = (Settings.DEFAULT_COL + 2) * Settings.DEFAULT_BLOCK_SIZE - Settings.DEFAULT_BLOCK_SIZE / 2;
@@ -28,6 +28,6 @@ public class Settings {
 
     public static final Dir START_DIR = Dir.RIGHT;
 
-    public static final long DEFAULT_MOVE_INTERVAL = 300; // ms
+    public static final long DEFAULT_MOVE_INTERVAL = 400; // ms
     
 }

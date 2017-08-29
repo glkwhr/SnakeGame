@@ -23,6 +23,9 @@ public class GameView {
     
     public void init() {
         canvas = new JPanel() {
+            
+            private static final long serialVersionUID = 7036254525837907298L;
+
             @Override
             public void paintComponent(Graphics graphics) {        
                 for (int i = 0; i < map.getRowCount(); i++) {

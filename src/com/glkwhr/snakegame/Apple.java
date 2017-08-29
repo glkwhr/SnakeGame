@@ -4,10 +4,8 @@
 package com.glkwhr.snakegame;
 
 import java.util.Random;
-import java.util.Set;
 
 import com.glkwhr.snakegame.GameMap.Block;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
  * @author H.W.
