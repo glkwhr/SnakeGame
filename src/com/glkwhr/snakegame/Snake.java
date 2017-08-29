@@ -116,10 +116,10 @@ public class Snake {
         if (nextBlock != Block.ERROR) {
             switch (nextBlock) {
             case EMPTY:
-                if (!moveHead(map, nextHead)) {
+                if (!moveTail(map)) {
                     break;
                 };
-                if (!moveTail(map)) {
+                if (!moveHead(map, nextHead)) {
                     break;
                 };
                 status = Status.MOVE;
@@ -129,6 +129,7 @@ public class Snake {
                 if (!moveHead(map, nextHead)) {
                     break;
                 };
+                map.produceApple();
                 status = Status.EAT;
                 break;
             case WALL:
@@ -139,6 +140,16 @@ public class Snake {
             }
         }
         return status;
+    }
+    
+    public void changeDir(Dir newDir) {
+        if (newDir != opposite(curDir)) {
+            curDir = newDir;
+        }
+    }
+    
+    public Dir getCurDir() {
+        return curDir;
     }
 
     private boolean moveTail(GameMap map) {
@@ -154,10 +165,6 @@ public class Snake {
         head.x = nextHead.x;
         head.y = nextHead.y;
         return map.setBlock(nextHead, Block.BODY);        
-    }
-
-    public Dir getCurDir() {
-        return curDir;
     }
 
 }

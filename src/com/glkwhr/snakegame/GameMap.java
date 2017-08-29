@@ -12,22 +12,18 @@ import java.util.Set;
  */
 public class GameMap {
     
-    // default size
-    public static final int DEFAULT_ROW = 5;
-    public static final int DEFAULT_COL = 5;
-    
     // block type
     public static enum Block {
         EMPTY, BODY, APPLE, WALL, ERROR
     }
     
     private final Block[][] matrix;
-    private final Apple apple;
     private final Set<Point> safeBlocks; // either EMPTY or APPLE
+    private Apple apple;
     // private int emptyBlockCounter;
     
     public GameMap() {
-        this(DEFAULT_ROW, DEFAULT_COL);
+        this(Settings.DEFAULT_ROW, Settings.DEFAULT_COL);
     }
     
     public GameMap(int row, int col) {
@@ -47,19 +43,25 @@ public class GameMap {
                 }
             }
         }
-        apple = new Apple();
-        Point applePos = apple.produce(this);
-        matrix[applePos.x][applePos.y] = Block.APPLE;
     }
     
-    public void eatApple() {
-        if (apple.consume(this)) {
-            setBlock(apple.produce(this), Block.APPLE);
+    public void produceApple() {
+        apple = new Apple();
+        Point applePos = apple.produce(this);
+        if (applePos != null) {
+            setBlock(applePos, Block.APPLE);
         }
+    }
+    public void eatApple() {
+        apple.consume(this);
     }
     
     public Set<Point> getSafeBlocks() {
         return safeBlocks;
+    }
+    
+    public Point getApple() {
+        return apple.getPos();
     }
     
     public Block getBlock(Point point) {

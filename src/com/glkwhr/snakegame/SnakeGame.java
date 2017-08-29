@@ -3,7 +3,15 @@
  */
 package com.glkwhr.snakegame;
 
+import java.applet.Applet;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.util.Scanner;
+import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import com.glkwhr.snakegame.GameMap.Block;
 import com.glkwhr.snakegame.Snake.Dir;
@@ -13,73 +21,46 @@ import com.glkwhr.snakegame.Snake.Status;
  * @author H.W.
  * @date   Aug 28, 2017   
  */
-public class SnakeGame {
-
+public class SnakeGame implements Runnable {
     /**
      * @param args
      */
     public static void main(String[] args) {
-        SnakeGame snakeGame = new SnakeGame(2, 8, new Point(1, 1), Dir.RIGHT);
-        snakeGame.gameStart();
+        SwingUtilities.invokeLater(new SnakeGame(Settings.DEFAULT_ROW, Settings.DEFAULT_COL, Settings.START_POINT, Settings.START_DIR));
     }
 
-    private int score;
     private final GameMap map;
     private final Snake snake;
-    private final Scanner scanner;
+    private GameView gameView;
+    private GameController gameController;
     
     public SnakeGame(int row, int col, Point startPoint, Dir startDir) {
-        score = 0;
         map = new GameMap(row, col);
         snake = new Snake(map, startPoint, startDir);
-        scanner = new Scanner(System.in);
-        map.setBlock(new Point(1, 4), Block.APPLE);
+        map.produceApple();
     }
     
-    private void gameStart() {
-        do {
-            show();
-            try {   
-                Thread.sleep(500);//∫¡√Î   
-            }   
-            catch(Exception e){
-                
-            }
-        } while (snake.move(map, convertInput()) != Status.DEAD);
-        gameOver();
-    }
-    
-    private Dir convertInput() {
-        Dir ret = snake.getCurDir();;
+    @Override
+    public void run() {
+        JFrame window = new JFrame("Snake Game");
         
-        return ret;
-    }
+        Container contentPane = window.getContentPane();
 
-    private void gameOver() {
-        System.out.printf("**********************\n");
-        System.out.printf("****  GAME OVER  *****\n");
-        System.out.printf("**** SCORE:%6d ****\n", score);
-        System.out.printf("**********************\n");
-    }
-
-    private void show() {
-        for (int i = 0; i < map.getRowCount(); i++) {
-            for (int j = 0; j < map.getColCount(); j++) {
-                switch (map.getBlock(i, j)) {
-                case EMPTY:
-                    System.out.printf("  "); break;
-                case WALL:
-                    System.out.printf("# "); break;
-                case APPLE:
-                    System.out.printf("* "); break;
-                case BODY:
-                    System.out.printf("O "); break;
-                default:
-                    break;
-                }
-            }
-            System.out.printf("\n");
-        }
+        gameView = new GameView(map);
+        gameView.init();
+        gameView.getCanvas().setPreferredSize(new Dimension(Settings.DEFAULT_MAP_WIDTH, Settings.DEFAULT_MAP_HEIGHT));        
+        contentPane.add(gameView.getCanvas(), BorderLayout.CENTER);
+        
+        gameController = new GameController(snake, map, gameView);
+        window.addKeyListener(gameController);
+        
+        window.pack();
+        window.setResizable(false);
+        window.setLocation(500, 300);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setVisible(true);
+        
+        new Thread(gameController).start();
     }
 
 }

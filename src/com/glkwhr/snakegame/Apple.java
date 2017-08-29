@@ -27,12 +27,18 @@ public class Apple {
     }
     
     public Point produce(GameMap map) {
-        pos = (Point) map.getSafeBlocks().toArray()[rand.nextInt(map.getSafeBlocks().size())];
-        map.setBlock(pos, Block.APPLE);
-        return new Point(pos);
+        Point ret = null;
+        if (map.getEmptyBlockCount() > 0) {
+            pos = (Point) map.getSafeBlocks().toArray()[rand.nextInt(map.getSafeBlocks().size())];
+            map.setBlock(pos, Block.APPLE);
+            ret = new Point(pos);
+        }
+        return ret;
     }
     
     public Boolean consume(GameMap map) {
-        return map.setBlock(pos, Block.EMPTY);
+        Point oldPos = new Point(pos);
+        pos = null;
+        return map.setBlock(oldPos, Block.EMPTY);
     }
 }
