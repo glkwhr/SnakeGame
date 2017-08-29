@@ -11,21 +11,23 @@ import com.glkwhr.snakegame.Snake.Dir;
  */
 public class Settings {
     
+    // default map size (block number)
+    public static final int DEFAULT_ROW = 6;
+    public static final int DEFAULT_COL = 8;
+    
     // default block size (in pixel)
     public static final int DEFAULT_BLOCK_SIZE = 30;
     
     // default map size (in pixel)
-    public static final int DEFAULT_MAP_WIDTH = 210;
-    public static final int DEFAULT_MAP_HEIGHT = 210;
+    public static final int DEFAULT_MAP_WIDTH = (Settings.DEFAULT_COL + 2) * Settings.DEFAULT_BLOCK_SIZE - Settings.DEFAULT_BLOCK_SIZE / 2;
+    public static final int DEFAULT_MAP_HEIGHT = (Settings.DEFAULT_ROW + 2) * Settings.DEFAULT_BLOCK_SIZE - Settings.DEFAULT_BLOCK_SIZE / 2;
     
-    // default map size (block number)
-    public static final int DEFAULT_ROW = 5;
-    public static final int DEFAULT_COL = 5;
+    
 
-    public static final Point START_POINT = new Point(3, 3);
+    public static final Point START_POINT = new Point(DEFAULT_ROW / 2, DEFAULT_COL / 2);
 
     public static final Dir START_DIR = Dir.RIGHT;
 
-    public static final long DEFAULT_MOVE_INTERVAL = 500; // ms
+    public static final long DEFAULT_MOVE_INTERVAL = 300; // ms
     
 }
