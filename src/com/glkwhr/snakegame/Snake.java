@@ -125,6 +125,7 @@ public class Snake {
                 status = Status.MOVE;
                 break;
             case APPLE:
+                map.eatApple();
                 if (!moveHead(map, nextHead)) {
                     break;
                 };

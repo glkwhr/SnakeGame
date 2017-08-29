@@ -24,4 +24,23 @@ public class Point {
         this.x = x;
         this.y = y;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        boolean ret = false;
+        if (this == o) {
+            ret = true;
+        } else if (o != null && this.getClass() == o.getClass()) {
+            Point other = (Point) o;
+            ret = this.x == other.x && this.y == other.y;
+        }
+        return ret;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 13 * x;
+        hash = 13 * hash + y;
+        return hash;
+    }
 }

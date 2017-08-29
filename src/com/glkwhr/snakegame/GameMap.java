@@ -3,6 +3,9 @@
  */
 package com.glkwhr.snakegame;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author H.W.
  * @date   Aug 28, 2017   
@@ -19,7 +22,9 @@ public class GameMap {
     }
     
     private final Block[][] matrix;
-    private int emptyBlockCounter;
+    private final Apple apple;
+    private final Set<Point> safeBlocks; // either EMPTY or APPLE
+    // private int emptyBlockCounter;
     
     public GameMap() {
         this(DEFAULT_ROW, DEFAULT_COL);
@@ -30,17 +35,31 @@ public class GameMap {
         col = col > 1 ? col : 2;
         // generate game map with boundary
         matrix = new Block[row + 2][col + 2];
-        emptyBlockCounter = 0;
+        safeBlocks = new HashSet<>();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 if (i == 0 || j == 0 || i == matrix.length - 1 || j == matrix[0].length - 1) {
                     matrix[i][j] = Block.WALL;
                 } else {
                     matrix[i][j] = Block.EMPTY;
-                    emptyBlockCounter++;
+                    safeBlocks.add(new Point(i, j));
+                    // emptyBlockCounter++;
                 }
             }
         }
+        apple = new Apple();
+        Point applePos = apple.produce(this);
+        matrix[applePos.x][applePos.y] = Block.APPLE;
+    }
+    
+    public void eatApple() {
+        if (apple.consume(this)) {
+            setBlock(apple.produce(this), Block.APPLE);
+        }
+    }
+    
+    public Set<Point> getSafeBlocks() {
+        return safeBlocks;
     }
     
     public Block getBlock(Point point) {
@@ -69,15 +88,23 @@ public class GameMap {
         boolean ret = false;
         if (point.x >= 0 && point.x < matrix.length 
                 && point.y >=0 && point.y < matrix[0].length) {
-            if (matrix[point.x][point.y] == Block.EMPTY && type != Block.EMPTY) {
-                emptyBlockCounter -= 1;
-            } else if (matrix[point.x][point.y] != Block.EMPTY && type == Block.EMPTY) {
-                emptyBlockCounter += 1;
+            if ((matrix[point.x][point.y] == Block.EMPTY || matrix[point.x][point.y] == Block.APPLE)
+                    && (type != Block.EMPTY && type != Block.APPLE)) {
+                safeBlocks.remove(new Point(point));
+                // emptyBlockCounter -= 1;
+            } else if ((matrix[point.x][point.y] != Block.EMPTY && matrix[point.x][point.y] != Block.APPLE)
+                    && (type == Block.EMPTY || type == Block.APPLE)) {
+                safeBlocks.add(new Point(point));
+                // emptyBlockCounter += 1;
             }
             matrix[point.x][point.y] = type;
             ret = true;
         }
         return ret;
+    }
+    
+    public int getEmptyBlockCount() {
+        return safeBlocks.size();
     }
     
     public int getRowCount() {
