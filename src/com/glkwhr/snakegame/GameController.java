@@ -20,6 +20,7 @@ public class GameController implements Runnable, KeyListener {
     private final Snake snake;
     private final GameMap map;
     private final GameView gameView;
+    private boolean running;
     private Status status;
     private int score;
     
@@ -28,6 +29,7 @@ public class GameController implements Runnable, KeyListener {
         this.map = map;
         this.gameView = gameView;
         this.status = Status.MOVE;
+        this.running = true;
         score = 0;
     }
     
@@ -47,6 +49,9 @@ public class GameController implements Runnable, KeyListener {
         case KeyEvent.VK_RIGHT:
             snake.changeDir(Dir.RIGHT);
             break;
+        case KeyEvent.VK_F2:
+            reset();
+            break;
 
         default:
             break;
@@ -65,22 +70,37 @@ public class GameController implements Runnable, KeyListener {
 
     @Override
     public void run() {
-        do {
-            gameView.draw();
-            if (status == Status.EAT) {
-                score += 10;
+        while (!Thread.currentThread().isInterrupted()) {
+            if (running) {
+                if (status != Status.DEAD && status != Status.ERROR) {
+                    gameView.draw();
+                    if (status == Status.EAT) {
+                        score += 10;
+                    }
+                    try {
+                        Thread.sleep(Settings.DEFAULT_MOVE_INTERVAL);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                    status = snake.move(map);
+                } else {
+                    gameOver();
+                }
             }
-            try {
-                Thread.sleep(Settings.DEFAULT_MOVE_INTERVAL);
-            } catch (InterruptedException e) {
-                break;
-            }
-            status = snake.move(map);
-        } while (status != Status.DEAD && status != Status.ERROR);
-        gameOver();
+        }
+    }
+    
+    private void reset() {
+        map.reset();
+        snake.reset(map);
+        map.produceApple();
+        score = 0;
+        status = Status.MOVE;
+        running = true;
     }
     
     private void gameOver() {
+        running = false;
         String result = "Game Over: You ";
         if (map.getEmptyBlockCount() == 0) {
             result += "Win!";

@@ -7,9 +7,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import com.glkwhr.snakegame.GameMap.Block;
-import com.glkwhr.snakegame.Snake.Dir;
-
-import javafx.scene.shape.MoveTo;
 
 /**
  * @author H.W.
@@ -58,6 +55,8 @@ public class Snake {
     }
     
     private final Deque<Point> body; // [tail, body, ..., body, head]
+    private final Point startPoint;
+    private final Dir startDir;
     private Point head;
     private Point tail;
     private Dir curDir;
@@ -65,35 +64,25 @@ public class Snake {
     
     public Snake(GameMap map, Point startPoint, Dir startDir) {
         curDir = startDir;
-        head = new Point();
-        tail = new Point();
-        
-        /*if (startPoint.x < 2) {
-            tail.x = 1;
-            head.x = 2;
-        } else {
-            if (startPoint.x >= map.getRowCount() - 1) {
-                head.x = map.getRowCount() - 2;
-            } else {
-                head.x = startPoint.x;
-            }
-            tail.x = head.x - 1;
-        }*/
-        tail.x = startPoint.x;
-        head.x = tail.x;
-        if (startPoint.y < 2) {
-            tail.y = 1;
-            head.y = 2;
-        } else { 
-            if (startPoint.y >= map.getColCount() - 1) {
-                head.y = map.getColCount() - 2;
-            } else {
-                head.y = startPoint.y;
-            }
-            tail.y = head.y - 1;
-        }
+        this.startDir = startDir;
+        this.startPoint = startPoint;
+        tail = new Point(startPoint);
+        head = new Point(tail.x, tail.y + 1);        
         
         body = new ArrayDeque<>();
+        body.addFirst(new Point(head));
+        body.addFirst(new Point(tail));
+        map.setBlock(head, Block.BODY);
+        map.setBlock(tail, Block.BODY);
+    }
+    
+    public void reset(GameMap map) {
+        curDir = startDir;
+        nextDir = null;
+        tail = new Point(startPoint);
+        head = new Point(tail.x, tail.y + 1);
+        
+        body.clear();
         body.addFirst(new Point(head));
         body.addFirst(new Point(tail));
         map.setBlock(head, Block.BODY);

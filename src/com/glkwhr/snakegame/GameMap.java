@@ -45,6 +45,20 @@ public class GameMap {
         }
     }
     
+    public void reset() {
+        safeBlocks.clear();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (i == 0 || j == 0 || i == matrix.length - 1 || j == matrix[0].length - 1) {
+                    matrix[i][j] = Block.WALL;
+                } else {
+                    matrix[i][j] = Block.EMPTY;
+                    safeBlocks.add(new Point(i, j));
+                }
+            }
+        }
+    }
+    
     public void produceApple() {
         apple = new Apple();
         Point applePos = apple.produce(this);
