@@ -1,25 +1,42 @@
-/**
- * 
- */
 package com.glkwhr.snakegame;
 
 /**
+ * Point class stores the coordinates of blocks.
  * @author H.W.
- * @date   Aug 28, 2017   
+ * @since   Aug 28, 2017   
  */
 public class Point {
     
-    public int x; // row
-    public int y; // column
+    /**
+     * Row number.
+     */
+    public int x;
     
+    /**
+     * Column number.
+     */
+    public int y;
+    
+    /**
+     * Create an new Point object without giving coordinates.
+     */
     public Point() {
         this(0, 0);
     }
     
+    /**
+     * Create an new Point object using existing point.
+     * @param p
+     */
     public Point(Point p) {
         this(p.x, p.y);
     }
     
+    /**
+     * Create an new Point object using given coordinates.
+     * @param x
+     * @param y
+     */
     public Point(int x, int y) {
         this.x = x;
         this.y = y;

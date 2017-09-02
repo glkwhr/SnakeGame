@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.glkwhr.snakegame;
 
 import java.awt.event.KeyEvent;
@@ -12,18 +9,48 @@ import com.glkwhr.snakegame.Snake.Dir;
 import com.glkwhr.snakegame.Snake.Status;
 
 /**
+ * GameController class receives user input and controls the game.
  * @author H.W.
- * @date   Aug 29, 2017   
+ * @since   Aug 29, 2017   
  */
 public class GameController implements Runnable, KeyListener {
     
+    /**
+     * Snake object in the game.
+     */
     private final Snake snake;
+    
+    /**
+     * GameMap used in the game.
+     */
     private final GameMap map;
+    
+    /**
+     * Game GUI.
+     */
     private final GameView gameView;
+    
+    /**
+     * Indicates whether the game is still running.
+     */
     private boolean running;
+    
+    /**
+     * Indicates the status of the snake.
+     */
     private Status status;
+    
+    /**
+     * Indicates current score.
+     */
     private int score;
     
+    /**
+     * Creates a new GameController object.
+     * @param snake The snake in this game.
+     * @param map The game map in this game.
+     * @param gameView Game GUI.
+     */
     public GameController(Snake snake, GameMap map, GameView gameView) {
         this.snake = snake;
         this.map = map;
@@ -33,6 +60,9 @@ public class GameController implements Runnable, KeyListener {
         score = 0;
     }
     
+    /**
+     * Handles key events. Redraws the {@link com.glkwhr.snakegame.GameController#gameView} when finished.
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
@@ -68,6 +98,9 @@ public class GameController implements Runnable, KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * Game control in the child thread.
+     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -90,6 +123,9 @@ public class GameController implements Runnable, KeyListener {
         }
     }
     
+    /**
+     * Reset game data and restart.
+     */
     private void reset() {
         map.reset();
         snake.reset(map);
@@ -99,6 +135,9 @@ public class GameController implements Runnable, KeyListener {
         running = true;
     }
     
+    /**
+     * This method would be called when the {@link com.glkwhr.snakegame.GameController#snake} is {@link com.glkwhr.snakegame.Snake.Status#DEAD} or {@link com.glkwhr.snakegame.Snake.Status#ERROR}
+     */
     private void gameOver() {
         running = false;
         String result = "Game Over: You ";

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.glkwhr.snakegame;
 
 import java.util.ArrayDeque;
