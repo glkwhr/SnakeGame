@@ -6,21 +6,31 @@ import java.util.Deque;
 import com.glkwhr.snakegame.GameMap.Block;
 
 /**
+ * Snake class contains information and behavior of the snake.
  * @author H.W.
- * @date   Aug 28, 2017   
+ * @since   Aug 28, 2017   
  */
 public class Snake {
     
-    // directions
+    /**
+     * Moving directions.
+     */
     public static enum Dir {
         UP, RIGHT, DOWN, LEFT
     }
     
-    // status after move()
+    /** 
+     * Snake status.
+     */
     public static enum Status {
         MOVE, EAT, DEAD, ERROR
     }
     
+    /**
+     * Get the opposite direction of given direction.
+     * @param curDir Given direction.
+     * @return Dir The opposite direction.
+     */
     public static Dir opposite(Dir curDir) {
         Dir ret = Dir.UP;
         switch (curDir) {
@@ -36,6 +46,12 @@ public class Snake {
         return ret;        
     }
     
+    /**
+     * Computes the next point's location after moving given point towards given direction by 1 block.
+     * @param head Given point.
+     * @param curDir Given direction.
+     * @return Point Location of the next point.
+     */
     public static Point movePoint(Point head, Dir curDir) {
         Point newPoint = head;
         switch(curDir) {
@@ -51,14 +67,47 @@ public class Snake {
         return newPoint;
     }
     
-    private final Deque<Point> body; // [tail, body, ..., body, head]
+    /**
+     * Double ended queue that stores the points' locations of the snake. [tail, body, ..., body, head]
+     */
+    private final Deque<Point> body;
+    
+    /**
+     * Original start point given when creating the snake.
+     */
     private final Point startPoint;
+    
+    /**
+     * Original moving direction given when creating the snake.
+     */
     private final Dir startDir;
+    
+    /**
+     * Current location of the snake's head block.
+     */
     private Point head;
+    
+    /**
+     * Current location of the snake's tail block.
+     */
     private Point tail;
+    
+    /**
+     * Current moving direction.
+     */
     private Dir curDir;
+    
+    /**
+     * Direction given by the player.
+     */
     private Dir nextDir;
     
+    /**
+     * Initiate a snake object.
+     * @param map The game map where the snake should be.
+     * @param startPoint Original start point.
+     * @param startDir Original moving direction.
+     */
     public Snake(GameMap map, Point startPoint, Dir startDir) {
         curDir = startDir;
         this.startDir = startDir;
@@ -73,6 +122,10 @@ public class Snake {
         map.setBlock(tail, Block.BODY);
     }
     
+    /**
+     * Reset the snake data and put it on the given map.
+     * @param map Given map where the snake should be.
+     */
     public void reset(GameMap map) {
         curDir = startDir;
         nextDir = null;
@@ -86,12 +139,21 @@ public class Snake {
         map.setBlock(tail, Block.BODY);
     }
 
+    /**
+     * Move the snake on given game map.
+     * @param map Given game map.
+     * @return Status Status of the snake after the move.
+     */
     public Status move(GameMap map) {
         return move(map, nextDir == null ? curDir : nextDir);
     }
-    /* 
-     * move towards current direction 
-     * */
+    
+    /**
+     * Move the snake towards given direction on given game map.
+     * @param map Given game map.
+     * @param dir Given moving direction.
+     * @return Status Status of the snake after the move.
+     */
     public Status move(GameMap map, Dir dir) {
         Status status = Status.ERROR;
         if (dir != opposite(curDir)) {
@@ -131,14 +193,27 @@ public class Snake {
         return status;
     }
     
+    /**
+     * Try to change current direction to new direction.
+     * @param newDir New direction.
+     */
     public void changeDir(Dir newDir) {
         nextDir = newDir;
     }
     
+    /**
+     * Get current moving direction.
+     * @return Dir Current moving direction.
+     */
     public Dir getCurDir() {
         return curDir;
     }
 
+    /**
+     * Move snake's tail on given map.
+     * @param map Given map.
+     * @return boolean Whether the tail is moved.
+     */
     private boolean moveTail(GameMap map) {
         Point oldTail = new Point(tail);
         body.removeFirst();
@@ -147,6 +222,12 @@ public class Snake {
         return map.setBlock(oldTail, Block.EMPTY);
     }
 
+    /**
+     * Move snake's head to given point on given map.
+     * @param map Given map.
+     * @param nextHead Given destination point.
+     * @return boolean Whether the head is moved.
+     */
     private boolean moveHead(GameMap map, Point nextHead) {
         body.addLast(new Point(nextHead));
         head.x = nextHead.x;

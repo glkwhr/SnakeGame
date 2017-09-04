@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 /**
  * GameView class controls game GUI.
  * @author H.W.
- * @date   Aug 28, 2017   
+ * @since   Aug 28, 2017   
  */
 public class GameView {
     
@@ -84,7 +84,7 @@ public class GameView {
     }
 
     /**
-     * This method is used to draw blocks of the type {@link com.glkwhr.snakegame.GameMap.Block#SNAKE}.
+     * This method is used to draw blocks of the type {@link com.glkwhr.snakegame.GameMap.Block#BODY}.
      * @param graphics
      * @param row Row number of the block.
      * @param col Column number of the block.

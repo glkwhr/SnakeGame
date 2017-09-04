@@ -26,7 +26,7 @@ public class Point {
     
     /**
      * Create an new Point object using existing point.
-     * @param p
+     * @param p Given point object.
      */
     public Point(Point p) {
         this(p.x, p.y);
@@ -34,8 +34,8 @@ public class Point {
     
     /**
      * Create an new Point object using given coordinates.
-     * @param x
-     * @param y
+     * @param x Row number.
+     * @param y Column number.
      */
     public Point(int x, int y) {
         this.x = x;
