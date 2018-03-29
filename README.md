@@ -1,6 +1,8 @@
 # SnakeGame
 Snake game demo with GUI (using Java Swing).
 
+![](https://github.com/glkwhr/SnakeGame/blob/master/snakegame.gif?raw=true)
+
 ## Instructions
 ### Control
 * `↑ ↓ ← →` change moving direction;
